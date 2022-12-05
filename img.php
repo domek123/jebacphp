@@ -92,21 +92,26 @@ if(!empty($_GET['w']) && !empty($_GET['h']) && !empty($_GET['days'])){
             $starty = 0.8 * $height - ((($daneWykresu[$i-1]['temp'] -36)/0.2) * ($ylinesize/6));
             $endy = 0.8 * $height - ((($daneWykresu[$i]['temp'] - 36)/0.2) * ($ylinesize/6));
 
-            array_push($data,[$startx,$starty]);
+            
 
             if($daneWykresu[$i-1]['state'] == "normal" &&  $daneWykresu[$i]['state'] == "normal"){
                 imageline($image, $startx, $starty, $endx, $endy, $blueline);
                 imagefilledellipse($image, $startx, $starty, $width * 0.01,$width * 0.01,$blueline);
                 //imagefill($point, 0,0,$blueline);
+                array_push($data,[$startx,$starty,$daneWykresu[$i-1]['temp']]);
             }else if($daneWykresu[$i-1]['state'] == 'none'){
                 imagefilledellipse($image, $startx, 0.8*$height, $width * 0.01,$width * 0.01,$greyline);
+                array_push($data,[$startx,0.8*$height,$daneWykresu[$i-1]['temp']]);
             }
             else if($daneWykresu[$i-1]['state'] == "ill"){
                 imagefilledellipse($image, $startx, 0.8*$height, $width * 0.01,$width * 0.01,$redline);
+                array_push($data,[$startx,0.8*$height,$daneWykresu[$i-1]['temp']]);
             }else if($daneWykresu[$i-1]['state'] == "normal"){
                 imagefilledellipse($image, $startx, $starty, $width * 0.01,$width * 0.01,$blueline);
+                array_push($data,[$startx,$starty,$daneWykresu[$i-1]['temp']]);
             }else if($daneWykresu[$i-1]['state'] == "normal" && $daneWykresu[$i]['state'] != "normal"){
                 imagefilledellipse($image, $startx, $starty, $width * 0.01,$width * 0.01,$blueline);
+                array_push($data,[$startx,$starty,$daneWykresu[$i-1]['temp']]);
             }
             
         }

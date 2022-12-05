@@ -17,19 +17,19 @@
     $s = session_id();
     if($s!=false){
         // print_r($_SESSION["data"]);
+        echo(count($_SESSION["data"]));
         echo '<map name="workmap">';
         foreach($_SESSION["data"] as $arr){
+            echo "</br>";
             print_r($arr);
-            print_r($arr[0]);
-            echo("</br>");
-            echo '<area shape="circle" coords="'.$arr[0].','.$arr[1].',5" onclick="myFunction()">';
+            echo '<area shape="circle" coords="'.$arr[0].','.$arr[1].',5" onclick="myFunction('.$arr[2].')">';
         }
         echo "</map>";
     }
     ?>
     <script>
-        function myFunction() {
-            alert("XXXDDDD")
+        function myFunction(temp) {
+            alert(temp)
 }
     </script>
 </body>
