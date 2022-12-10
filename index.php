@@ -8,20 +8,17 @@
 </head>
 <body>
     <?php
-    $url = 'http://localhost:8080/wykresy/img.php';
+    $url = 'http://localhost/jebacphp/img.php';
     if(!empty($_GET['w']) && !empty($_GET['h']) && !empty($_GET['days'])){
-        $url='http://localhost:8080/wykresy/img.php?w='.$_GET["w"].'&h='.$_GET['h'].'&days='.$_GET["days"];
+        $url='http://localhost/jabecphp/img.php?w='.$_GET["w"].'&h='.$_GET['h'].'&days='.$_GET["days"];
     }
     echo "<img src='".$url."' usemap='#workmap'/>";
     session_start();
     $s = session_id();
     if($s!=false){
-        // print_r($_SESSION["data"]);
-        echo(count($_SESSION["data"]));
         echo '<map name="workmap">';
         foreach($_SESSION["data"] as $arr){
-            echo "</br>";
-            print_r($arr);
+           
             echo '<area shape="circle" coords="'.$arr[0].','.$arr[1].',5" onclick="myFunction('.$arr[2].')">';
         }
         echo "</map>";
@@ -32,5 +29,9 @@
             alert(temp)
 }
     </script>
+    <form action="generatePDf.php" method="post">
+        <button type="submit">Generuj pdf</button>
+    </form>
+    
 </body>
 </html>
