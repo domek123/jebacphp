@@ -3,17 +3,22 @@
 include('hidden.php');
 $mysqli = new mysqli($host, $user, $passwd, 'wykres');
 
-$resultWykres = $mysqli->query('select * from daneWykresu');
-$daneWykresu = $resultWykres->fetch_all(MYSQLI_ASSOC);
+session_start();
+
 $width = 800;
 $height = 300;
-$days = 24;
-// print_r($daneWykresu)
+$days = 25;
+// print_r($daneWykresu);
 if(!empty($_GET['w']) && !empty($_GET['h']) && !empty($_GET['days'])){
         $width = $_GET['w'];
         $height = $_GET['h'];
         $days = $_GET['days'];
-}
+}       
+        if($days>25){
+            $days = 25;
+        }
+        $resultWykres = $mysqli->query('select * from daneWykresu WHERE day<'.($days+2));
+        $daneWykresu = $resultWykres->fetch_all(MYSQLI_ASSOC);
         // Create the size of image or blank image
         $image = imagecreatetruecolor($width, $height);
         
@@ -92,12 +97,11 @@ if(!empty($_GET['w']) && !empty($_GET['h']) && !empty($_GET['days'])){
             $starty = 0.8 * $height - ((($daneWykresu[$i-1]['temp'] -36)/0.2) * ($ylinesize/6));
             $endy = 0.8 * $height - ((($daneWykresu[$i]['temp'] - 36)/0.2) * ($ylinesize/6));
 
-            
-
             if($daneWykresu[$i-1]['state'] == "normal" &&  $daneWykresu[$i]['state'] == "normal"){
-                imageline($image, $startx, $starty, $endx, $endy, $blueline);
+                if($i!=$days){
+                    imageline($image, $startx, $starty, $endx, $endy, $blueline);
+                }
                 imagefilledellipse($image, $startx, $starty, $width * 0.01,$width * 0.01,$blueline);
-                //imagefill($point, 0,0,$blueline);
                 array_push($data,[$startx,$starty,$daneWykresu[$i-1]['temp']]);
             }else if($daneWykresu[$i-1]['state'] == 'none'){
                 imagefilledellipse($image, $startx, 0.8*$height, $width * 0.01,$width * 0.01,$greyline);
@@ -106,17 +110,16 @@ if(!empty($_GET['w']) && !empty($_GET['h']) && !empty($_GET['days'])){
             else if($daneWykresu[$i-1]['state'] == "ill"){
                 imagefilledellipse($image, $startx, 0.8*$height, $width * 0.01,$width * 0.01,$redline);
                 array_push($data,[$startx,0.8*$height,$daneWykresu[$i-1]['temp']]);
-            }else if($daneWykresu[$i-1]['state'] == "normal"){
-                imagefilledellipse($image, $startx, $starty, $width * 0.01,$width * 0.01,$blueline);
-                array_push($data,[$startx,$starty,$daneWykresu[$i-1]['temp']]);
-            }else if($daneWykresu[$i-1]['state'] == "normal" && $daneWykresu[$i]['state'] != "normal"){
+            }
+            else if($daneWykresu[$i-1]['state'] == "normal"){
                 imagefilledellipse($image, $startx, $starty, $width * 0.01,$width * 0.01,$blueline);
                 array_push($data,[$startx,$starty,$daneWykresu[$i-1]['temp']]);
             }
             
         }
-        session_start();
-$_SESSION["data"] = $data;
+        $_SESSION["data"] = $data;
+
+
 
 header('Content-type: image/png');
      
