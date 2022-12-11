@@ -111,5 +111,9 @@
         }
 
     </script>
+    <form action="generatePDF.php" method="get">
+        <button submit >GENERUJ RAPORT PDF</button>
+    </form>
+    
 </body>
 </html>
