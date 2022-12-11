@@ -111,5 +111,9 @@
         }
 
     </script>
+    <form action="generatePDf.php" method="post">
+        <button type="submit">Generuj pdf</button>
+    </form>
+    
 </body>
 </html>
